@@ -1,3 +1,70 @@
+## Grinding ~ Record your time working towards something.
+
+by Thomas Herzog
+
+---
+
+I am building this app as a way for me to track my weekly progress on becoming a Frontend JavaScript React Developer. I get discouraged if I don't see progress and I wanted a way to show myself I am putting in the work. Relying only on git commits or completed projects to show my effort gives me a warped image in my head.
+
+It is easy to spend many hours on something while seemly getting nowhere progress wise, but that doesn't mean I didn't put in the effort. Talking to other developers I've realized sometimes seemly simple bugs or unknown information just take a while to track and shouldn't be seen as a lack of effort or being lazy. There are also times spent reading or researching that don't lead to a lot of physical results but are an essential part of the learning process.
+
+My hope is this app will let me see I'm putting in the effort and hopefully point me in the direction of which tasks and workflows lead to the best results so I can make sure I'm using my time wisely.
+
+I don't want to be grinding forever.
+
+**Minimum Viable Product (MVP)**
+
+- Single Start/Stop button records timestamps to log file.
+
+**Other Desireable features**
+
+- clock to show current time spent
+- graph display to show the total time spent over days
+- average time
+- hashtags to show where time was spent by category
+- use d3 for graphs to make easily exportable to other webpages
+
+---
+
+### `npm run dev`
+
+starts react dev mode and electron dev mode
+
+---
+
+## Issues
+
+**Debian Sandbox Error** on 'npm start' prevents electron from starting up
+
+```
+$ npm start
+
+> electron-quick-start@1.0.0 start /home/thomas/JS/electron-quick-start
+> electron .
+
+[25637:0730/094022.048291:FATAL:setuid_sandbox_host.cc(157)] The SUID sandbox helper binary was found, but is not configured correctly. Rather than run without sandboxing I'm aborting now. You need to make sure that /home/thomas/JS/electron-quick-start/node_modules/electron/dist/chrome-sandbox is owned by root and has mode 4755.
+```
+
+**solution**
+
+```
+$ cd node_modules/electron/dist/
+$ sudo chown root chrome-sandbox
+$ sudo chmod 4755 chrome-sandbox
+```
+
+[source](https://www.bountysource.com/issues/73344311-the-suid-sandbox-helper-binary-was-found-but-is-not-configured-correctly)
+
+---
+
+## Resources
+
+- https://medium.com/@kitze/%EF%B8%8F-from-react-to-an-electron-app-ready-for-production-a0468ecb1da3
+- https://www.codementor.io/randyfindley/how-to-build-an-electron-app-using-create-react-app-and-electron-builder-ss1k0sfer
+- https://www.freecodecamp.org/news/building-an-electron-application-with-create-react-app-97945861647c/
+
+---
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
