@@ -12,8 +12,20 @@ const url = require("url");
 let mainWindow;
 
 function createWindow() {
+  //determine desktop size to place window on top right handsize  offset to not block minimize/close buttons.
+  const { width, height } = electron.screen.getPrimaryDisplay().workAreaSize;
+  const defaultX = width * 0.85;
+
   // Create the browser window.
-  mainWindow = new BrowserWindow({ width: 800, height: 600 });
+  mainWindow = new BrowserWindow({
+    width: 139,
+    height: 36,
+    y: 0,
+    x: defaultX,
+    focusable: false, //makes window stay on top and visible in all workspaces on linux
+    resizable: false,
+    frame: false
+  });
 
   // and load the index.html of the app.
   const startUrl =
