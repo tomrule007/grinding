@@ -18,8 +18,8 @@ function createWindow() {
 
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 139,
-    height: 36,
+    width: 56,
+    height: 56,
     y: 0,
     x: defaultX,
     focusable: false, //makes window stay on top and visible in all workspaces on linux
