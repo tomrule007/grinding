@@ -15,15 +15,15 @@ function createWindow() {
   //determine desktop size to place window on top right handsize  offset to not block minimize/close buttons.
   const { width, height } = electron.screen.getPrimaryDisplay().workAreaSize;
   const defaultX = width * 0.85;
-
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 56,
-    height: 56,
+    width: 70,
+    height: 70,
     y: 0,
     x: defaultX,
     focusable: false, //makes window stay on top and visible in all workspaces on linux
     resizable: false,
+    transparent: true,
     frame: false
   });
 
@@ -52,7 +52,8 @@ function createWindow() {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on("ready", createWindow);
+// ! added setTimeout as a funny workaround to get transparent windows to work.
+app.on("ready", () => setTimeout(createWindow, 100));
 
 // Quit when all windows are closed.
 app.on("window-all-closed", function() {
