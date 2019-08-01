@@ -17,7 +17,7 @@ function createWindow() {
   const defaultX = width * 0.85;
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    width: 70,
+    width: 90,
     height: 70,
     y: 0,
     x: defaultX,
