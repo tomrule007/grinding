@@ -11,10 +11,14 @@ const theme = createMuiTheme({
     secondary: lightGreen //onState
   }
 });
-
+const divStyle = {
+  //  WebkitAppRegion: "drag",  // Will be necessary for moving button
+  paddingTop: 2,
+  paddingLeft: 15
+};
 function App() {
   return (
-    <div style={{ paddingTop: 2, paddingLeft: 15 }}>
+    <div style={divStyle}>
       <ThemeProvider theme={theme}>
         <TheButton />
       </ThemeProvider>
