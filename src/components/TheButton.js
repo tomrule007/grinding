@@ -1,6 +1,22 @@
 import React, { Component } from "react";
 import Fab from "@material-ui/core/Fab";
 
+function logEvent(data) {
+  const localStorage = window.localStorage;
+  //get previously stored log or a blank array.
+  let storedLog = localStorage.getItem("grindLogs")
+    ? JSON.parse(localStorage.getItem("grindLogs"))
+    : [];
+
+  //append new event data
+  let updatedLog = storedLog.concat(data);
+
+  //save updatedLog back to local storage
+  localStorage.setItem("grindLogs", JSON.stringify(updatedLog));
+  // const logFile = JSON.parse(localStorage.getItem("log"));
+  // console.log(logFile);/
+}
+
 class TheButton extends Component {
   constructor(props) {
     super(props);
@@ -23,11 +39,23 @@ class TheButton extends Component {
       // record current time as stop time
       lastStop = time;
       lastSession = lastStop - lastStart;
+      logEvent({
+        event: "STOP",
+        time: lastStop,
+        tag: "emoji",
+        comment: "msg"
+      });
       //this.setState({ lastStop: time, lastSession: lastStop - lastStart });
       console.log({ lastStop, lastSession });
     } else {
       // record current time as start time
       lastStart = time;
+      logEvent({
+        event: "START",
+        time: lastStart,
+        tag: "#category",
+        comment: "msg"
+      });
       // this.setState({ lastStart: time });
       console.log({ lastStart });
     }
