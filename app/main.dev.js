@@ -59,18 +59,29 @@ app.on('window-all-closed', () => {
   }
 });
 
-app.on('ready', async () => {
+app.on('ready', () => setTimeout(createWindow, 100));
+
+async function createWindow() {
   if (
     process.env.NODE_ENV === 'development' ||
     process.env.DEBUG_PROD === 'true'
   ) {
     await installExtensions();
   }
+  // determine desktop size to place window in top righthand corner (offset to not block minimize/close buttons.)
+  const { width } = require('electron').screen.getPrimaryDisplay().workAreaSize;
+  const defaultX = width * 0.85;
 
   mainWindow = new BrowserWindow({
     show: false,
-    width: 1024,
-    height: 728
+    width: 75, // 90
+    height: 75, // 70
+    y: 0,
+    x: defaultX,
+    focusable: false, // makes window stay on top and visible in all workspaces on linux
+    resizable: false,
+    transparent: true,
+    frame: false
   });
 
   mainWindow.loadURL(`file://${__dirname}/app.html`);
@@ -99,4 +110,4 @@ app.on('ready', async () => {
   // Remove this if your app does not use auto updates
   // eslint-disable-next-line
   new AppUpdater();
-});
+}
