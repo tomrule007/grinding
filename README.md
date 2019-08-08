@@ -1,3 +1,31 @@
+## Grinding ~ Record your time working towards something.
+
+by Thomas Herzog
+
+---
+
+I am building this app as a way for me to track my weekly progress on becoming a Frontend JavaScript React Developer. I get discouraged if I don't see progress and I wanted a way to show myself I am putting in the work. Relying only on git commits or completed projects to show my effort gives me a warped image in my head.
+
+It is easy to spend many hours on something while seemly getting nowhere progress wise, but that doesn't mean I didn't put in the effort. Talking to other developers I've realized sometimes seemly simple bugs or unknown information just take a while to track and shouldn't be seen as a lack of effort or being lazy. There are also times spent reading or researching that don't lead to a lot of physical results but are an essential part of the learning process.
+
+My hope is this app will let me see I'm putting in the effort and hopefully point me in the direction of which tasks and workflows lead to the best results so I can make sure I'm using my time wisely.
+
+I don't want to be grinding forever.
+
+**Minimum Viable Product (MVP)**
+
+- Single Start/Stop button records timestamps to log file.
+
+**Other Desireable features**
+
+- clock to show current time spent
+- graph display to show the total time spent over days
+- average time
+- hashtags to show where time was spent by category
+- use d3 for graphs to make easily exportable to other webpages
+
+---
+
 <img src="internals/img/erb-banner.png" width="100%" />
 
 <br>
@@ -34,8 +62,7 @@
 [![OpenCollective](https://opencollective.com/electron-react-boilerplate/backers/badge.svg)](#backers)
 [![OpenCollective](https://opencollective.com/electron-react-boilerplate/sponsors/badge.svg)](#sponsors)
 [![Good first issues open][good-first-issue-image]][good-first-issue-url]
-[![StackOverflow](http://img.shields.io/badge/stackoverflow-electron_react_boilerplate-blue.svg)]( http://stackoverflow.com/questions/tagged/electron-react-boilerplate )
-
+[![StackOverflow](http://img.shields.io/badge/stackoverflow-electron_react_boilerplate-blue.svg)](http://stackoverflow.com/questions/tagged/electron-react-boilerplate)
 
 </div>
 
