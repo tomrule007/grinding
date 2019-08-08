@@ -27,8 +27,30 @@ class TheButton extends Component {
       lastStop: null,
       lastSession: 0,
       grinding: false,
-      color: 'primary'
+      color: 'primary',
+      intervalHandle: null,
+      timeDisplay: 'start'
     };
+  }
+
+  startTimerDisplay() {
+    const boundTimer = this.timerDisplayTick.bind(this);
+    const intervalHandle = setInterval(boundTimer, 1000);
+
+    this.setState({ intervalHandle, timeDisplay: '0' });
+  }
+
+  timerDisplayTick() {
+    const { lastStart } = this.state;
+    const seconds = Math.floor((Date.now() - lastStart) / 1000);
+    const minutes = Math.floor(seconds / 60);
+
+    this.setState({ timeDisplay: seconds < 60 ? seconds : minutes });
+  }
+
+  stopTimerDisplay() {
+    const { intervalHandle } = this.state;
+    clearInterval(intervalHandle);
   }
 
   toggleStateAndSave(time) {
@@ -45,6 +67,8 @@ class TheButton extends Component {
         comment: 'msg'
       });
       console.log({ lastStop, lastSession });
+      // stop timer
+      this.stopTimerDisplay();
     } else {
       // record current time as start time
       lastStart = time;
@@ -56,6 +80,9 @@ class TheButton extends Component {
       });
       // this.setState({ lastStart: time });
       console.log({ lastStart });
+
+      // start timer
+      this.startTimerDisplay();
     }
     // toggle state
     grinding = !grinding;
@@ -66,10 +93,10 @@ class TheButton extends Component {
   }
 
   render() {
-    const { color } = this.state;
+    const { color, timeDisplay } = this.state;
     return (
       <Fab color={color} onClick={() => this.toggleStateAndSave(Date.now())}>
-        4m
+        {timeDisplay}
       </Fab>
     );
   }
