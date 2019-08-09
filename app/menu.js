@@ -27,20 +27,69 @@ export default class MenuBuilder {
     return menu;
   }
 
-  setupDevelopmentEnvironment() {
-    this.mainWindow.openDevTools();
-    this.mainWindow.webContents.on('context-menu', (e, props) => {
-      const { x, y } = props;
-
+  buildCtxMenu() {
+    this.mainWindow.webContents.on('context-menu', () => {
       Menu.buildFromTemplate([
         {
-          label: 'Inspect element',
+          label: 'Daily Total: ___  (___ sessions)',
+          click() {
+            console.log('context menu item clicked');
+          }
+        },
+        { type: 'separator' },
+        {
+          label: 'Edit',
+          submenu: [
+            {
+              label: 'Preferences',
+              click() {
+                // TODO: Open preference window
+              }
+            },
+            {
+              label: 'Grind Log',
+              click() {
+                // TODO:  Open log editor window
+              }
+            },
+            { type: 'separator' },
+            {
+              label: 'Export grind log',
+              click() {
+                // TODO:  open file save dialog (cvs, json options)
+                shell.openItem(app.getPath('userData'));
+              }
+            }
+          ]
+        },
+        { type: 'separator' },
+        {
+          label: 'GitHub Repo',
+          click() {
+            shell.openExternal('https://github.com/tomrule007/grinding');
+          }
+        },
+        { type: 'separator' },
+        {
+          label: 'Toggle Developer Tools',
+          accelerator: 'Alt+Command+I',
           click: () => {
-            this.mainWindow.inspectElement(x, y);
+            this.mainWindow.toggleDevTools();
+          }
+        },
+        {
+          label: 'Quit',
+          accelerator: 'Command+Q',
+          click: () => {
+            app.quit();
           }
         }
       ]).popup(this.mainWindow);
     });
+  }
+
+  setupDevelopmentEnvironment() {
+    this.mainWindow.openDevTools();
   }
 
   buildDarwinTemplate() {

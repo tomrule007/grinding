@@ -10,7 +10,7 @@
  *
  * @flow
  */
-import { app, BrowserWindow, Menu, MenuItem } from 'electron';
+import { app, BrowserWindow } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
@@ -99,25 +99,14 @@ async function createWindow() {
       mainWindow.focus();
     }
   });
-  // START: rightClickContextMenu
-  const ctxMenu = new Menu();
-  ctxMenu.append(
-    new MenuItem({
-      label: 'Hello'
-    })
-  );
-  mainWindow.webContents.on('context-menu', function(e, params) {
-    console.log('EVENT FIRED: context-menu');
-    ctxMenu.popup(mainWindow, params.x, params.y);
-  });
-  // STOP: rightClickContextMenu
 
   mainWindow.on('closed', () => {
     mainWindow = null;
   });
 
   const menuBuilder = new MenuBuilder(mainWindow);
-  menuBuilder.buildMenu();
+  // menuBuilder.buildMenu();
+  menuBuilder.buildCtxMenu();
 
   // Remove this if your app does not use auto updates
   // eslint-disable-next-line
