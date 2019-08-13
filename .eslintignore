@@ -1,3 +1,6 @@
+#temp ignore to ease develpment
+app/containers/LogPage.js
+
 # Logs
 logs
 *.log

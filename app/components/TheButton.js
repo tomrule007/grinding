@@ -1,23 +1,6 @@
 import React, { Component } from 'react';
 import Fab from '@material-ui/core/Fab';
-// const electron = window.require('electron');
-// const userDataPath = (electron.app || electron.remote.app).getPath("userData");
-// console.log(userDataPath);
-function logEvent(data) {
-  const { localStorage } = window;
-  // get previously stored log or a blank array.
-  const storedLog = localStorage.getItem('grindLogs')
-    ? JSON.parse(localStorage.getItem('grindLogs'))
-    : [];
-
-  // append new event data
-  const updatedLog = storedLog.concat(data);
-
-  // save updatedLog back to local storage
-  localStorage.setItem('grindLogs', JSON.stringify(updatedLog));
-  // const logFile = JSON.parse(localStorage.getItem("log"));
-  // console.log(logFile);/
-}
+import log from './log';
 
 class TheButton extends Component {
   constructor(props) {
@@ -60,11 +43,11 @@ class TheButton extends Component {
       // record current time as stop time
       lastStop = time;
       lastSession = lastStop - lastStart;
-      logEvent({
-        event: 'STOP',
-        time: lastStop,
-        tag: 'emoji',
-        comment: 'msg'
+      log.stop({
+        stop: lastStop,
+        mood: 'mood placeholder',
+        comment: 'comment placeholder',
+        gTime: lastSession
       });
       console.log({ lastStop, lastSession });
       // stop timer
@@ -72,15 +55,11 @@ class TheButton extends Component {
     } else {
       // record current time as start time
       lastStart = time;
-      logEvent({
-        event: 'START',
-        time: lastStart,
-        tag: '#category',
-        comment: 'msg'
+      log.start({
+        start: lastStart,
+        tag: 'tag placeholder',
+        goal: 'goal placeholder'
       });
-      // this.setState({ lastStart: time });
-      console.log({ lastStart });
-
       // start timer
       this.startTimerDisplay();
     }

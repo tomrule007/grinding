@@ -14,6 +14,7 @@ import { app, BrowserWindow } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
+// import { create } from 'handlebars';
 
 export default class AppUpdater {
   constructor() {
@@ -22,8 +23,9 @@ export default class AppUpdater {
     autoUpdater.checkForUpdatesAndNotify();
   }
 }
-
+// All Windows
 let mainWindow = null;
+let logWindow;
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
@@ -61,6 +63,43 @@ app.on('window-all-closed', () => {
 
 app.on('ready', () => setTimeout(createWindow, 100));
 
+// NEED TO MOVE TO SEPARATE 'LogWindow.js' FILE!
+
+function createLogWindow() {
+  if (logWindow) {
+    console.log('Already Exists');
+    logWindow.show();
+    logWindow.focus();
+    return;
+  }
+  console.log('Creating Log Window');
+  logWindow = new BrowserWindow({
+    show: false,
+    width: 500,
+    height: 500
+  });
+
+  logWindow.setVisibleOnAllWorkspaces(true);
+  logWindow.loadURL(`file://${__dirname}/app.html#/log`);
+
+  logWindow.webContents.on('did-finish-load', () => {
+    if (!logWindow) {
+      throw new Error('"logWindow" is not defined');
+    }
+    if (process.env.START_MINIMIZED) {
+      logWindow.minimize();
+    } else {
+      logWindow.show();
+      logWindow.focus();
+    }
+  });
+
+  logWindow.on('closed', () => {
+    logWindow = null;
+  });
+}
+// END MOVE SECTION
+
 async function createWindow() {
   if (
     process.env.NODE_ENV === 'development' ||
@@ -84,6 +123,7 @@ async function createWindow() {
     frame: false
   });
 
+  createLogWindow();
   mainWindow.loadURL(`file://${__dirname}/app.html`);
 
   // @TODO: Use 'ready-to-show' event

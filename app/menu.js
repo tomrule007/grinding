@@ -1,6 +1,45 @@
 // @flow
 import { app, Menu, shell, BrowserWindow } from 'electron';
 
+// NEED TO MOVE TO SEPARATE 'LogWindow.js' FILE!
+let logWindow;
+
+function createLogWindow() {
+  if (logWindow) {
+    console.log('Already Exists');
+    logWindow.show();
+    logWindow.focus();
+    return;
+  }
+  console.log('Creating Log Window');
+  logWindow = new BrowserWindow({
+    show: false,
+    width: 500,
+    height: 500
+  });
+
+  logWindow.setVisibleOnAllWorkspaces(true);
+  logWindow.loadURL(`file://${__dirname}/log.html`);
+
+  logWindow.webContents.on('did-finish-load', () => {
+    if (!logWindow) {
+      throw new Error('"logWindow" is not defined');
+    }
+    if (process.env.START_MINIMIZED) {
+      logWindow.minimize();
+    } else {
+      logWindow.show();
+      logWindow.focus();
+    }
+  });
+
+  logWindow.on('closed', () => {
+    logWindow = null;
+  });
+}
+
+// END MOVE SECTION
+
 export default class MenuBuilder {
   mainWindow: BrowserWindow;
 
@@ -37,6 +76,13 @@ export default class MenuBuilder {
           }
         },
         { type: 'separator' },
+        {
+          label: 'View Log',
+          click() {
+            console.log('clicked View Log');
+            createLogWindow();
+          }
+        },
         {
           label: 'Edit',
           submenu: [
