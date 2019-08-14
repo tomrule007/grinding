@@ -10,10 +10,9 @@
  *
  * @flow
  */
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, Menu, shell } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
-import MenuBuilder from './menu';
 
 export default class AppUpdater {
   constructor() {
@@ -144,10 +143,72 @@ async function createWindow() {
     mainWindow = null;
   });
 
-  const menuBuilder = new MenuBuilder(mainWindow);
-  // menuBuilder.buildMenu();
-  menuBuilder.buildCtxMenu();
-
+  // Context Menu Setup
+  mainWindow.webContents.on('context-menu', () => {
+    Menu.buildFromTemplate([
+      {
+        label: 'Daily Total: ___  (___ sessions)',
+        click() {
+          console.log('context menu item clicked');
+        }
+      },
+      { type: 'separator' },
+      {
+        label: 'View Log',
+        click() {
+          console.log('clicked View Log');
+          createLogWindow();
+        }
+      },
+      {
+        label: 'Edit',
+        submenu: [
+          {
+            label: 'Preferences',
+            click() {
+              // TODO: Open preference window
+            }
+          },
+          {
+            label: 'Grind Log',
+            click() {
+              // TODO:  Open log editor window
+            }
+          },
+          { type: 'separator' },
+          {
+            label: 'Export grind log',
+            click() {
+              // TODO:  open file save dialog (cvs, json options)
+              shell.openItem(app.getPath('userData'));
+            }
+          }
+        ]
+      },
+      { type: 'separator' },
+      {
+        label: 'GitHub Repo',
+        click() {
+          shell.openExternal('https://github.com/tomrule007/grinding');
+        }
+      },
+      { type: 'separator' },
+      {
+        label: 'Toggle Developer Tools',
+        accelerator: 'Alt+Command+I',
+        click: () => {
+          mainWindow.toggleDevTools();
+        }
+      },
+      {
+        label: 'Quit',
+        accelerator: 'Command+Q',
+        click: () => {
+          app.quit();
+        }
+      }
+    ]).popup(mainWindow);
+  });
   // Remove this if your app does not use auto updates
   // eslint-disable-next-line
   new AppUpdater();
