@@ -14,7 +14,6 @@ import { app, BrowserWindow } from 'electron';
 import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
-// import { create } from 'handlebars';
 
 export default class AppUpdater {
   constructor() {
@@ -75,10 +74,11 @@ function createLogWindow() {
   console.log('Creating Log Window');
   logWindow = new BrowserWindow({
     show: false,
-    width: 500,
-    height: 500
+    title: 'Grinding Log',
+    width: 1100,
+    height: 550
   });
-
+  logWindow.setMenuBarVisibility(false);
   logWindow.setVisibleOnAllWorkspaces(true);
   logWindow.loadURL(`file://${__dirname}/app.html#/log`);
 
