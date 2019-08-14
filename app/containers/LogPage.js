@@ -50,43 +50,52 @@ const tableIcons = {
 // END ICON SUPPORT
 type Props = {};
 
-// const logData = log.read();
+const formatDateTime = ms => new Date(ms).toLocaleString('en-US');
+const formatTime = ms => {
+  const minutes = ms / 1000 / 60;
+  const hours = minutes / 60;
+  return minutes < 90
+    ? `${minutes.toFixed(2)} Minutes`
+    : `${hours.toFixed(2)} Hours`;
+};
 
 export default class LogPage extends Component<Props> {
   props: Props;
 
   render() {
+    // need to figure out how to set this to state so table auto updates on log changes.
+    const logData = log.read();
     return (
       <div style={{ maxWidth: '100%' }}>
         <MaterialTable
           icons={tableIcons}
           columns={[
-            { title: 'Grinding Time', field: 'gTime' },
+            {
+              title: 'Grinding Time',
+              field: 'gTime',
+              render: ({ gTime }) => formatTime(gTime)
+            },
 
-            { title: 'Start Time', field: 'start' },
-            { title: 'End Time', field: 'stop' },
-            { title: 'Time', field: 'time', type: 'numeric' },
+            {
+              title: 'Start Time',
+              field: 'start',
+              render: ({ start }) => formatDateTime(start)
+            },
+            {
+              title: 'End Time',
+              field: 'stop',
+              render: ({ stop }) => formatDateTime(stop)
+            },
             { title: 'tag', field: 'tag' },
             { title: 'goal', field: 'goal' },
 
             {
               title: 'Mood',
-              field: 'mood',
-              lookup: { 1: '=(', 2: '=/', 3: '=|', 4: '=)', 5: '=P' }
+              field: 'mood'
             },
             { title: 'comment', field: 'comment' }
           ]}
-          data={[
-            {
-              start: 12213213213,
-              stop: 22222222,
-              gTime: 'stop-start',
-              tag: '#grinding',
-              goal: 'finish log editor',
-              mood: 1,
-              comment: 'went well'
-            }
-          ]}
+          data={logData}
           title="Grinding Log"
         />
       </div>

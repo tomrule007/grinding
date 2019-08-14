@@ -83,8 +83,7 @@ const log = {
   },
 
   read() {
-    const logData = getLogData(logName);
-    return logData;
+    return getLogData(logName);
   }
 };
 
