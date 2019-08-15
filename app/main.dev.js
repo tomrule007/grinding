@@ -21,9 +21,6 @@ export default class AppUpdater {
     autoUpdater.checkForUpdatesAndNotify();
   }
 }
-// All Windows
-let mainWindow = null;
-let logWindow;
 
 if (process.env.NODE_ENV === 'production') {
   const sourceMapSupport = require('source-map-support');
@@ -47,23 +44,52 @@ const installExtensions = async () => {
   ).catch(console.log);
 };
 
-/**
- * Add event listeners...
- */
+// All Windows
+let mainWindow;
+let logWindow;
+let chartWindow;
+// let crashPrompt; //Prompt to fix incomplete sessions on start (delete it, resume it, end it (set time))
+// let startPrompt; //Where you set tag/goal
+// let stopPrompt;  //Where you set mood/comments
 
-app.on('window-all-closed', () => {
-  // Respect the OSX convention of having the application in memory even
-  // after all windows have been closed
-  if (process.platform !== 'darwin') {
-    app.quit();
+// WINDOW FACTORY (will refactor all these into one generic Factory Function)
+
+function createChartWindowAndShow() {
+  if (chartWindow) {
+    console.log('Already Exists');
+    chartWindow.show();
+    chartWindow.focus();
+    return;
   }
-});
+  console.log('Creating Log Window');
+  chartWindow = new BrowserWindow({
+    show: false,
+    title: 'Grinding Log',
+    width: 1100,
+    height: 550
+  });
+  chartWindow.setMenuBarVisibility(false);
+  chartWindow.setVisibleOnAllWorkspaces(true);
+  chartWindow.loadURL(`file://${__dirname}/app.html#/log`);
 
-app.on('ready', () => setTimeout(createWindow, 100));
+  chartWindow.webContents.on('did-finish-load', () => {
+    if (!chartWindow) {
+      throw new Error('"chartWindow" is not defined');
+    }
+    if (process.env.START_MINIMIZED) {
+      chartWindow.minimize();
+    } else {
+      chartWindow.show();
+      chartWindow.focus();
+    }
+  });
 
-// NEED TO MOVE TO SEPARATE 'LogWindow.js' FILE!
+  chartWindow.on('closed', () => {
+    chartWindow = null;
+  });
+}
 
-function createLogWindow() {
+function createLogWindowAndShow() {
   if (logWindow) {
     console.log('Already Exists');
     logWindow.show();
@@ -97,8 +123,6 @@ function createLogWindow() {
     logWindow = null;
   });
 }
-// END MOVE SECTION
-
 async function createWindow() {
   if (
     process.env.NODE_ENV === 'development' ||
@@ -122,7 +146,6 @@ async function createWindow() {
     frame: false
   });
 
-  createLogWindow();
   mainWindow.loadURL(`file://${__dirname}/app.html`);
 
   // @TODO: Use 'ready-to-show' event
@@ -143,49 +166,30 @@ async function createWindow() {
     mainWindow = null;
   });
 
-  // Context Menu Setup
+  // mainWindow: Context Menu Setup
   mainWindow.webContents.on('context-menu', () => {
     Menu.buildFromTemplate([
-      {
-        label: 'Daily Total: ___  (___ sessions)',
-        click() {
-          console.log('context menu item clicked');
-        }
-      },
-      { type: 'separator' },
       {
         label: 'View Log',
         click() {
           console.log('clicked View Log');
-          createLogWindow();
+          createLogWindowAndShow();
         }
       },
       {
-        label: 'Edit',
-        submenu: [
-          {
-            label: 'Preferences',
-            click() {
-              // TODO: Open preference window
-            }
-          },
-          {
-            label: 'Grind Log',
-            click() {
-              // TODO:  Open log editor window
-            }
-          },
-          { type: 'separator' },
-          {
-            label: 'Export grind log',
-            click() {
-              // TODO:  open file save dialog (cvs, json options)
-              shell.openItem(app.getPath('userData'));
-            }
-          }
-        ]
+        label: 'View Chart',
+        click() {
+          console.log('clicked View Chart');
+          createChartWindowAndShow();
+        }
       },
       { type: 'separator' },
+      {
+        label: 'Preferences',
+        click() {
+          // TODO: Open preference window
+        }
+      },
       {
         label: 'GitHub Repo',
         click() {
@@ -213,3 +217,18 @@ async function createWindow() {
   // eslint-disable-next-line
   new AppUpdater();
 }
+// WINDOW FACTORY END
+
+/**
+ * Add event listeners...
+ */
+
+app.on('window-all-closed', () => {
+  // Respect the OSX convention of having the application in memory even
+  // after all windows have been closed
+  if (process.platform !== 'darwin') {
+    app.quit();
+  }
+});
+
+app.on('ready', () => setTimeout(createWindow, 100));
