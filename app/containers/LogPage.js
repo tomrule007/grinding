@@ -84,10 +84,10 @@ export default class LogPage extends Component<Props> {
           field: 'stop',
           render: ({ stop }) => formatDateTime(stop)
         },
-        { title: 'tag', field: 'tag' },
-        { title: 'goal', field: 'goal' },
+        { title: 'Tag', field: 'tag' },
+        { title: 'Goal', field: 'goal' },
         { title: 'Mood', field: 'mood' },
-        { title: 'comment', field: 'comment' }
+        { title: 'Comment', field: 'comment' }
       ],
       data: logData
     };
