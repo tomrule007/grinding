@@ -5,6 +5,7 @@ import App from './containers/App';
 import HomePage from './containers/HomePage';
 import CounterPage from './containers/CounterPage';
 import LogPage from './containers/LogPage';
+import ChartPage from './containers/ChartPage';
 
 export default () => (
   <App>
@@ -12,6 +13,7 @@ export default () => (
       <Route path={routes.COUNTER} component={CounterPage} />
       <Route exact path={routes.HOME} component={HomePage} />
       <Route path={routes.LOG} component={LogPage} />
+      <Route path={routes.CHART} component={ChartPage} />
     </Switch>
   </App>
 );

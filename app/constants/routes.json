@@ -1,5 +1,6 @@
 {
   "HOME": "/",
   "COUNTER": "/counter",
-  "LOG": "/log"
+  "LOG": "/log",
+  "CHART": "/chart"
 }

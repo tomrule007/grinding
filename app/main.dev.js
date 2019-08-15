@@ -70,7 +70,7 @@ function createChartWindowAndShow() {
   });
   chartWindow.setMenuBarVisibility(false);
   chartWindow.setVisibleOnAllWorkspaces(true);
-  chartWindow.loadURL(`file://${__dirname}/app.html#/log`);
+  chartWindow.loadURL(`file://${__dirname}/app.html#/chart`);
 
   chartWindow.webContents.on('did-finish-load', () => {
     if (!chartWindow) {
