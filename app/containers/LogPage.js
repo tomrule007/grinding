@@ -61,42 +61,83 @@ const formatTime = ms => {
 
 export default class LogPage extends Component<Props> {
   props: Props;
+  constructor(props) {
+    super(props);
+
+    // @TODO log wrapper that tells children to update when log data changes and also allow table to update log data store.
+    const logData = log.read();
+
+    this.state = {
+      columns: [
+        {
+          title: 'Grinding Time',
+          field: 'gTime',
+          render: ({ gTime }) => formatTime(gTime)
+        },
+        {
+          title: 'Start Time',
+          field: 'start',
+          render: ({ start }) => formatDateTime(start)
+        },
+        {
+          title: 'End Time',
+          field: 'stop',
+          render: ({ stop }) => formatDateTime(stop)
+        },
+        { title: 'tag', field: 'tag' },
+        { title: 'goal', field: 'goal' },
+        { title: 'Mood', field: 'mood' },
+        { title: 'comment', field: 'comment' }
+      ],
+      data: logData
+    };
+  }
 
   render() {
-    // need to figure out how to set this to state so table auto updates on log changes.
-    const logData = log.read();
     return (
       <div style={{ maxWidth: '100%' }}>
         <MaterialTable
           icons={tableIcons}
-          columns={[
-            {
-              title: 'Grinding Time',
-              field: 'gTime',
-              render: ({ gTime }) => formatTime(gTime)
-            },
-
-            {
-              title: 'Start Time',
-              field: 'start',
-              render: ({ start }) => formatDateTime(start)
-            },
-            {
-              title: 'End Time',
-              field: 'stop',
-              render: ({ stop }) => formatDateTime(stop)
-            },
-            { title: 'tag', field: 'tag' },
-            { title: 'goal', field: 'goal' },
-
-            {
-              title: 'Mood',
-              field: 'mood'
-            },
-            { title: 'comment', field: 'comment' }
-          ]}
-          data={logData}
+          columns={this.state.columns}
+          data={this.state.data}
           title="Grinding Log"
+          editable={{
+            onRowAdd: newData =>
+              new Promise((resolve, reject) => {
+                setTimeout(() => {
+                  {
+                    const data = this.state.data;
+                    data.push(newData);
+                    this.setState({ data }, () => resolve());
+                  }
+                  resolve();
+                }, 1000);
+              }),
+            onRowUpdate: (newData, oldData) =>
+              new Promise((resolve, reject) => {
+                setTimeout(() => {
+                  {
+                    const data = this.state.data;
+                    const index = data.indexOf(oldData);
+                    data[index] = newData;
+                    this.setState({ data }, () => resolve());
+                  }
+                  resolve();
+                }, 1000);
+              }),
+            onRowDelete: oldData =>
+              new Promise((resolve, reject) => {
+                setTimeout(() => {
+                  {
+                    let data = this.state.data;
+                    const index = data.indexOf(oldData);
+                    data.splice(index, 1);
+                    this.setState({ data }, () => resolve());
+                  }
+                  resolve();
+                }, 1000);
+              })
+          }}
         />
       </div>
     );
