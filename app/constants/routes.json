@@ -2,5 +2,7 @@
   "HOME": "/",
   "COUNTER": "/counter",
   "LOG": "/log",
-  "CHART": "/chart"
+  "CHART": "/chart",
+  "START": "/start",
+  "STOP": "/stop"
 }

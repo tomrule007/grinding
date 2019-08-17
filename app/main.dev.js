@@ -64,7 +64,7 @@ function createChartWindowAndShow() {
   console.log('Creating Log Window');
   chartWindow = new BrowserWindow({
     show: false,
-    title: 'Grinding Log',
+    title: 'Grinding Chart',
     width: 1100,
     height: 550
   });
