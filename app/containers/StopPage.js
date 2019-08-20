@@ -108,6 +108,7 @@ export default function StopDialog() {
   return (
     <div>
       <Dialog
+        disableBackdropClick
         onClose={handleClose}
         TransitionComponent={Transition}
         keepMounted
