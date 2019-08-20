@@ -10,7 +10,7 @@ import {
   Bar,
   Legend
 } from 'recharts';
-import localStore from '../components/localStore';
+import localStore from '../utils/localStore';
 
 type Props = {};
 

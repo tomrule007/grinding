@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Fab from '@material-ui/core/Fab';
-import localStore from './localStore';
+import localStore from '../utils/localStore';
 import { startWin, stopWin } from '../WindowFactory';
 import { ON_COLOR, OFF_COLOR } from '../constants/defaultConfig';
 

@@ -13,7 +13,7 @@ import TextField from '@material-ui/core/TextField';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import { remote } from 'electron';
-import localStore from './localStore';
+import localStore from '../utils/localStore';
 
 const currentWindow = remote.getCurrentWindow();
 

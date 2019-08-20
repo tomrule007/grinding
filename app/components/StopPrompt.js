@@ -26,7 +26,7 @@ import ToggleButton from '@material-ui/lab/ToggleButton';
 import ToggleButtonGroup from '@material-ui/lab/ToggleButtonGroup';
 
 import { remote } from 'electron';
-import localStore from './localStore';
+import localStore from '../utils/localStore';
 
 const currentWindow = remote.getCurrentWindow();
 
