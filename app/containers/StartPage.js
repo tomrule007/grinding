@@ -1,15 +1,12 @@
 // @flow
 
 import React, { Component } from 'react';
-
-// import log from '../components/log';
-
-type Props = {};
+import StartPrompt from '../components/StartPrompt';
 
 export default class StopPromptPage extends Component<Props> {
   props: Props;
 
   render() {
-    return <div />;
+    return <StartPrompt />;
   }
 }

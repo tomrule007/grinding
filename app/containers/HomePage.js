@@ -15,10 +15,6 @@ const theme = createMuiTheme({
   }
 });
 
-const electron = require('electron');
-
-const userDataPath = (electron.app || electron.remote.app).getPath('userData');
-console.log(userDataPath);
 export default class HomePage extends Component<Props> {
   props: Props;
 

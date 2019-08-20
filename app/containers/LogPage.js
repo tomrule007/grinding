@@ -1,5 +1,3 @@
-// @flow
-
 import React, { Component, forwardRef } from 'react';
 import MaterialTable from 'material-table';
 
@@ -21,7 +19,7 @@ import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 
-import log from '../components/log';
+import localStore from '../components/localStore';
 
 const tableIcons = {
   Add: forwardRef((props, ref) => <AddBox {...props} ref={ref} />),
@@ -60,12 +58,11 @@ const formatTime = ms => {
 };
 
 export default class LogPage extends Component<Props> {
-  props: Props;
   constructor(props) {
     super(props);
 
     // @TODO log wrapper that tells children to update when log data changes and also allow table to update log data store.
-    const logData = log.read();
+    const logData = localStore.get('log');
 
     this.state = {
       columns: [

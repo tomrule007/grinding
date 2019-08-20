@@ -10,7 +10,7 @@ import {
   Bar,
   Legend
 } from 'recharts';
-import log from '../components/log';
+import localStore from '../components/localStore';
 
 type Props = {};
 
@@ -25,7 +25,7 @@ export default class ChartPage extends Component<Props> {
 
     // @TODO log wrapper that tells children to update when log data changes and also allow table to update log data store.
     const logData = Object.entries(
-      log.read().reduce((acc, { gTime, start }) => {
+      localStore.get('log').reduce((acc, { gTime, start }) => {
         const formatedStart = formatStartDate(start);
         if (acc[formatedStart]) {
           acc[formatedStart] += gTime;
