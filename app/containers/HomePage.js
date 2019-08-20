@@ -9,7 +9,7 @@ import { ThemeProvider } from '@material-ui/styles';
 
 // utils
 import localStore from '../utils/localStore';
-import { startWin, stopWin } from '../WindowFactory';
+import { startWin, stopWin } from '../utils/WindowFactory';
 import { ON_COLOR, OFF_COLOR } from '../constants/defaultConfig';
 
 const theme = createMuiTheme({
