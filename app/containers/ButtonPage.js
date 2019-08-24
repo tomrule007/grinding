@@ -51,7 +51,21 @@ class TheButton extends Component {
   }
 
   toggleGrind(clickTime) {
-    let { grinding, start, color } = this.state;
+    let { grinding, start, color, stopWindow, startWindow } = this.state;
+
+    // browserWindow -> browserWindow | false;
+    const aliveAndVisible = browserWindow =>
+      browserWindow && !browserWindow.isDestroyed() && browserWindow.isVisible()
+        ? browserWindow
+        : false;
+    const visibleDialogWindow =
+      aliveAndVisible(startWindow) || aliveAndVisible(stopWindow);
+    if (visibleDialogWindow) {
+      // if dialog is open stop state change and shake window for user attention
+      console.log('click stopped! Shaking started :)');
+      console.log(visibleDialogWindow);
+      return;
+    }
 
     // toggle state
     grinding = !grinding;
@@ -62,7 +76,7 @@ class TheButton extends Component {
       start = clickTime;
       localStore.set('session', { start: clickTime });
       this.startTimer();
-      startWin.create();
+      startWindow = startWin.create();
     } else {
       // stopping grinding session
       color = OFF_COLOR;
@@ -71,10 +85,10 @@ class TheButton extends Component {
         gTime: clickTime - start
       });
       this.stopTimer();
-      stopWin.create();
+      stopWindow = stopWin.create();
     }
 
-    this.setState({ grinding, start, color });
+    this.setState({ grinding, start, color, stopWindow, startWindow });
   }
 
   render() {

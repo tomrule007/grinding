@@ -265,7 +265,9 @@
     "recharts": "^1.7.1",
     "redux": "^4.0.1",
     "redux-thunk": "^2.3.0",
-    "source-map-support": "^0.5.11"
+    "reshake": "^1.2.1",
+    "source-map-support": "^0.5.11",
+    "styled-components": "^4.3.2"
   },
   "devEngines": {
     "node": ">=7.x",

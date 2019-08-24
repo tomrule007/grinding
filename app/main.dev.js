@@ -100,8 +100,10 @@ function createLogWindowAndShow() {
   logWindow = new BrowserWindow({
     show: false,
     title: 'Grinding Log',
-    width: 1100,
-    height: 550
+    width: 600,
+    height: 560
+    // transparent: true,
+    // frame: false
   });
   logWindow.setMenuBarVisibility(false);
   logWindow.setVisibleOnAllWorkspaces(true);

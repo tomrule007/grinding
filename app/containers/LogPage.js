@@ -1,5 +1,6 @@
 import React, { Component, forwardRef } from 'react';
 import MaterialTable from 'material-table';
+import Typography from '@material-ui/core/Typography';
 
 // ICON SUPPORT
 
@@ -19,6 +20,12 @@ import SaveAlt from '@material-ui/icons/SaveAlt';
 import Search from '@material-ui/icons/Search';
 import ViewColumn from '@material-ui/icons/ViewColumn';
 
+//Mood Icons
+import CloseIcon from '@material-ui/icons/Close';
+import VeryDissatisfied from '@material-ui/icons/SentimentVeryDissatisfiedOutlined';
+import Dissatisfied from '@material-ui/icons/SentimentDissatisfiedOutlined';
+import VerySatisfied from '@material-ui/icons/SentimentVerySatisfiedOutlined';
+import Satisfied from '@material-ui/icons/SentimentSatisfiedOutlined';
 import localStore from '../utils/localStore';
 
 const tableIcons = {
@@ -48,13 +55,33 @@ const tableIcons = {
 // END ICON SUPPORT
 type Props = {};
 
-const formatDateTime = ms => new Date(ms).toLocaleString('en-US');
+const moodToIcon = mood => {
+  switch (mood) {
+    case 'VeryDissatisfied':
+      return <VeryDissatisfied fontSize="large" />;
+    case 'Dissatisfied':
+      return <Dissatisfied fontSize="large" />;
+    case 'Satisfied':
+      return <Satisfied fontSize="large" />;
+    case 'VerySatisfied':
+      return <VerySatisfied fontSize="large" />;
+
+    default:
+      return <div>N/A</div>;
+  }
+};
+
+const formatJustTime = ms =>
+  new Date(ms).toLocaleTimeString('en-US', {
+    hour: '2-digit',
+    minute: '2-digit'
+  });
+const formatJustDate = ms => new Date(ms).toLocaleDateString('en-US');
+
 const formatTime = ms => {
-  const minutes = ms / 1000 / 60;
-  const hours = minutes / 60;
-  return minutes < 90
-    ? `${minutes.toFixed(2)} Minutes`
-    : `${hours.toFixed(2)} Hours`;
+  const minutes = Math.floor(ms / 1000 / 60);
+  const hours = Math.floor(minutes / 60);
+  return minutes < 60 ? `${minutes} Minutes` : `${hours}:${minutes % 60} Hours`;
 };
 
 export default class LogPage extends Component<Props> {
@@ -69,22 +96,21 @@ export default class LogPage extends Component<Props> {
         {
           title: 'Grinding Time',
           field: 'gTime',
+          editable: 'never',
           render: ({ gTime }) => formatTime(gTime)
         },
         {
           title: 'Start Time',
           field: 'start',
-          render: ({ start }) => formatDateTime(start)
-        },
-        {
-          title: 'End Time',
-          field: 'stop',
-          render: ({ stop }) => formatDateTime(stop)
+          editable: 'never',
+          render: ({ start }) => formatJustDate(start)
         },
         { title: 'Tag', field: 'tag' },
-        { title: 'Goal', field: 'goal' },
-        { title: 'Mood', field: 'mood' },
-        { title: 'Comment', field: 'comment' }
+        {
+          title: 'Mood',
+          field: 'mood',
+          render: ({ mood }) => moodToIcon(mood)
+        }
       ],
       data: logData
     };
@@ -97,44 +123,29 @@ export default class LogPage extends Component<Props> {
           icons={tableIcons}
           columns={this.state.columns}
           data={this.state.data}
-          title="Grinding Log"
-          editable={{
-            onRowAdd: newData =>
-              new Promise((resolve, reject) => {
-                setTimeout(() => {
-                  {
-                    const data = this.state.data;
-                    data.push(newData);
-                    this.setState({ data }, () => resolve());
-                  }
-                  resolve();
-                }, 1000);
-              }),
-            onRowUpdate: (newData, oldData) =>
-              new Promise((resolve, reject) => {
-                setTimeout(() => {
-                  {
-                    const data = this.state.data;
-                    const index = data.indexOf(oldData);
-                    data[index] = newData;
-                    this.setState({ data }, () => resolve());
-                  }
-                  resolve();
-                }, 1000);
-              }),
-            onRowDelete: oldData =>
-              new Promise((resolve, reject) => {
-                setTimeout(() => {
-                  {
-                    let data = this.state.data;
-                    const index = data.indexOf(oldData);
-                    data.splice(index, 1);
-                    this.setState({ data }, () => resolve());
-                  }
-                  resolve();
-                }, 1000);
-              })
+          onRowClick={(event, rowData, togglePanel) => togglePanel()}
+          detailPanel={rowData => {
+            return (
+              <div>
+                <Typography component="p">
+                  <b>Goal: </b> {rowData.goal}
+                </Typography>
+                <Typography component="p">
+                  <b>Comment: </b> {rowData.comment}
+                </Typography>
+                <Typography component="p">
+                  <b>Start:</b> {formatJustTime(rowData.start)}
+                  {'    '}
+                  <b>Stop:</b> {formatJustTime(rowData.stop)}
+                </Typography>
+                <Typography component="p" />
+              </div>
+            );
           }}
+          options={{
+            exportButton: true
+          }}
+          title="Grinding Log"
         />
       </div>
     );

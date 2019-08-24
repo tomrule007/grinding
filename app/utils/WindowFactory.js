@@ -28,6 +28,7 @@ export const startWin = {
         this.win.focus();
       }
     });
+    return this.win;
   },
   close() {
     this.win.close();
@@ -60,6 +61,7 @@ export const stopWin = {
         this.win.focus();
       }
     });
+    return this.win;
   },
   close() {
     this.win.close();
