@@ -8,6 +8,7 @@ import {
   Bar,
   Legend
 } from 'recharts';
+import DateRangeToolbar from '../components/DateRangeToolbar';
 import localStore from '../utils/localStore';
 
 const formatStartDate = ms => new Date(ms).toLocaleDateString('en-US');
@@ -17,9 +18,11 @@ export default class ChartPage extends Component {
   constructor(props) {
     super(props);
 
-    // @TODO log wrapper that tells children to update when log data changes and also allow table to update log data store.
-    const logData = Object.entries(
-      localStore.get('log').reduce((acc, { gTime, start }) => {
+    // @TODO log wrapper that tells children to update when log data changes
+    // and also allow table to update log data store.
+    const rawData = localStore.get('log');
+    const totalDailyGrindTime = Object.entries(
+      rawData.reduce((acc, { gTime, start }) => {
         const formatedStart = formatStartDate(start);
         if (acc[formatedStart]) {
           acc[formatedStart] += gTime;
@@ -29,16 +32,21 @@ export default class ChartPage extends Component {
         return acc;
       }, {})
     ).map(keyVal => ({ date: keyVal[0], time: formatTime(keyVal[1]) }));
-    console.log(logData);
 
-    this.state = { data: logData };
+    this.state = { data: totalDailyGrindTime, rawData };
   }
 
   render() {
-    const { data } = this.state;
+    const { data, rawData } = this.state;
+    console.log(rawData);
     return (
-      <div style={{ textAlign: 'center' }}>
-        <h1>Your Time Grinding</h1>
+      <div>
+        <DateRangeToolbar data={rawData} onChange={this.setDateRange} />
+
+        <div style={{ textAlign: 'center' }}>
+          <h1>Your Time Grinding</h1>
+        </div>
+
         <BarChart width={730} height={250} data={data}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="date" />
