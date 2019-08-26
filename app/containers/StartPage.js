@@ -75,9 +75,10 @@ export default function StartDialog() {
     // close window
     currentWindow.close();
   };
+
   const handleSave = () => {
     localStore.update('session', values);
-    localStore.tagListAdd(values.tag);
+    // localStore.tagListAdd(values.tag);
     currentWindow.close();
   };
   return (
