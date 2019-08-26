@@ -24,11 +24,33 @@ class TheButton extends Component {
     this.state = {
       start: null,
       grinding: false,
-      color: OFF_COLOR,
       intervalID: null,
       timeDisplay: 'start'
     };
   }
+
+  componentDidMount() {
+    // add localStorage listener
+    window.addEventListener('storage', this.syncWithLocalStorage);
+  }
+
+  componentWillUnmount() {
+    console.log('wrapper Unmounting');
+    window.removeEventListener('storage', this.syncWithLocalStorage);
+  }
+
+  syncWithLocalStorage = ({ key, newValue }) => {
+    // is session over?
+    if (key === 'session') {
+      console.log({ newValue });
+    }
+    if (key === 'session' && newValue === null) {
+      // session is over reset display.
+      console.log('canceling session');
+      this.stopTimer();
+      this.setState({ grinding: false, start: null });
+    }
+  };
 
   startTimer() {
     const intervalID = setInterval(() => this.timerTick(Date.now()), 1000);
@@ -51,7 +73,7 @@ class TheButton extends Component {
   }
 
   toggleGrind(clickTime) {
-    let { grinding, start, color, stopWindow, startWindow } = this.state;
+    let { grinding, start, stopWindow, startWindow } = this.state;
 
     // browserWindow -> browserWindow | false;
     const aliveAndVisible = browserWindow =>
@@ -72,14 +94,12 @@ class TheButton extends Component {
 
     if (grinding) {
       // starting grinding session
-      color = ON_COLOR;
       start = clickTime;
       localStore.set('session', { start: clickTime });
       this.startTimer();
       startWindow = startWin.create();
     } else {
       // stopping grinding session
-      color = OFF_COLOR;
       localStore.update('session', {
         stop: clickTime,
         gTime: clickTime - start
@@ -88,14 +108,17 @@ class TheButton extends Component {
       stopWindow = stopWin.create();
     }
 
-    this.setState({ grinding, start, color, stopWindow, startWindow });
+    this.setState({ grinding, start, stopWindow, startWindow });
   }
 
   render() {
-    const { color, timeDisplay } = this.state;
+    const { grinding, timeDisplay } = this.state;
     return (
       <ThemeProvider theme={theme}>
-        <Fab color={color} onClick={() => this.toggleGrind(Date.now())}>
+        <Fab
+          color={grinding ? ON_COLOR : OFF_COLOR}
+          onClick={() => this.toggleGrind(Date.now())}
+        >
           {timeDisplay}
         </Fab>
       </ThemeProvider>

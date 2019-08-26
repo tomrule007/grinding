@@ -15,7 +15,6 @@ import MuiDialogTitle from '@material-ui/core/DialogTitle';
 import MuiDialogContent from '@material-ui/core/DialogContent';
 import MuiDialogActions from '@material-ui/core/DialogActions';
 import Typography from '@material-ui/core/Typography';
-import Slide from '@material-ui/core/Slide';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 
@@ -43,10 +42,6 @@ const styles = theme => ({
   }
 });
 
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
-
 const DialogTitle = withStyles(styles)(props => {
   const { children, classes, onClose } = props;
   return (
@@ -67,7 +62,7 @@ const DialogTitle = withStyles(styles)(props => {
 
 const DialogContent = withStyles(theme => ({
   root: {
-    padding: theme.spacing(2)
+    padding: theme.spacing(1)
   }
 }))(MuiDialogContent);
 
@@ -88,7 +83,6 @@ export default function StopDialog() {
   const handleChange = name => event => {
     setValues({ ...values, [name]: event.target.value });
   };
-  const [open, setOpen] = React.useState(false);
 
   const handleClose = () => {
     currentWindow.close();
@@ -110,16 +104,8 @@ export default function StopDialog() {
       <Dialog
         disableBackdropClick
         onClose={handleClose}
-        TransitionComponent={Transition}
         keepMounted
-        open={
-          (console.log('Dialog Hidden'),
-          setTimeout(() => {
-            console.log('showing dialog');
-            setOpen(true);
-          }, 200),
-          open)
-        }
+        open="true"
       >
         <DialogTitle onClose={handleClose}>How did it go?</DialogTitle>
         <DialogContent dividers>

@@ -17,4 +17,14 @@ const saveToLog = key => {
   set('log', [...oldLog, get(key)]);
 };
 
+// work in progress
+// const tagListAdd = tag => {
+//   const prevTagList = get('tagList');
+//   if (prevTagList) {
+//     if (prevTagList[tag]) {
+//       const newCount = prevTagList[tag] + 1;
+//     }
+//   }
+// };
+
 export default { set, get, update, remove, saveToLog };

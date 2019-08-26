@@ -8,14 +8,11 @@ import MuiDialogActions from '@material-ui/core/DialogActions';
 import IconButton from '@material-ui/core/IconButton';
 import CloseIcon from '@material-ui/icons/Close';
 import Typography from '@material-ui/core/Typography';
-import Slide from '@material-ui/core/Slide';
 import TextField from '@material-ui/core/TextField';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import { remote } from 'electron';
 import localStore from '../utils/localStore';
-
-const currentWindow = remote.getCurrentWindow();
 
 const styles = theme => ({
   root: {
@@ -28,10 +25,6 @@ const styles = theme => ({
     top: theme.spacing(1),
     color: theme.palette.grey[500]
   }
-});
-
-const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
 });
 
 const DialogTitle = withStyles(styles)(props => {
@@ -54,7 +47,7 @@ const DialogTitle = withStyles(styles)(props => {
 
 const DialogContent = withStyles(theme => ({
   root: {
-    padding: theme.spacing(2)
+    padding: theme.spacing(1)
   }
 }))(MuiDialogContent);
 
@@ -65,9 +58,10 @@ const DialogActions = withStyles(theme => ({
   }
 }))(MuiDialogActions);
 
-export default function CustomizedDialogs() {
-  const [values, setValues] = React.useState({});
-  const [open, setOpen] = React.useState(false);
+export default function StartDialog() {
+  const currentWindow = remote.getCurrentWindow();
+  const GOAL_CHARACTER_LIMIT = 140;
+  const [values, setValues] = React.useState({ goal: '', isOpen: true });
 
   const handleChange = name => event => {
     setValues({ ...values, [name]: event.target.value });
@@ -83,6 +77,7 @@ export default function CustomizedDialogs() {
   };
   const handleSave = () => {
     localStore.update('session', values);
+    localStore.tagListAdd(values.tag);
     currentWindow.close();
   };
   return (
@@ -90,17 +85,8 @@ export default function CustomizedDialogs() {
       <Dialog
         disableBackdropClick
         onClose={handleClose}
-        TransitionComponent={Transition}
         keepMounted
-        aria-labelledby="customized-dialog-title"
-        open={
-          (console.log('Dialog Hidden'),
-          setTimeout(() => {
-            console.log('showing dialog');
-            setOpen(true);
-          }, 50),
-          open)
-        }
+        open={values.isOpen}
       >
         <DialogTitle id="start-prompt-title" onClose={handleClose}>
           Grinding Time!
@@ -123,11 +109,14 @@ export default function CustomizedDialogs() {
                 id="goal-input"
                 label="goal"
                 variant="outlined"
+                inputProps={{
+                  maxlength: GOAL_CHARACTER_LIMIT
+                }}
                 multiline
-                rows="2"
-                rowsMax="4"
+                rows="4"
                 fullWidth
                 onChange={handleChange('goal')}
+                helperText={`${values.goal.length}/${GOAL_CHARACTER_LIMIT}`}
               />
             </ListItem>
           </List>
