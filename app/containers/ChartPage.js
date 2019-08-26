@@ -1,5 +1,3 @@
-// @flow
-
 import React, { Component } from 'react';
 import {
   BarChart,
@@ -12,14 +10,10 @@ import {
 } from 'recharts';
 import localStore from '../utils/localStore';
 
-type Props = {};
-
 const formatStartDate = ms => new Date(ms).toLocaleDateString('en-US');
 const formatTime = ms => Math.floor(ms / 1000); // Ms to minutes
 
-export default class ChartPage extends Component<Props> {
-  props: Props;
-
+export default class ChartPage extends Component {
   constructor(props) {
     super(props);
 
