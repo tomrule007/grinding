@@ -28,7 +28,7 @@ export default class ChartPage extends Component {
         }
         return acc;
       }, {})
-    ).map(keyval => ({ date: keyval[0], time: formatTime(keyval[1]) }));
+    ).map(keyVal => ({ date: keyVal[0], time: formatTime(keyVal[1]) }));
     console.log(logData);
 
     this.state = { data: logData };
@@ -37,8 +37,8 @@ export default class ChartPage extends Component {
   render() {
     const { data } = this.state;
     return (
-      <div>
-        <h1>test chart header</h1>
+      <div style={{ textAlign: 'center' }}>
+        <h1>Your Time Grinding</h1>
         <BarChart width={730} height={250} data={data}>
           <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="date" />
